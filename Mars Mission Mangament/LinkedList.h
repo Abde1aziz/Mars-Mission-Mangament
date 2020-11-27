@@ -19,12 +19,12 @@ public:
 		count = 0;
 		Head = nullptr;
 	}
-	bool operator ==(const string& str1, const string& str2)
+	/*bool operator == (const string& str1, const string& str2)
 	{
 		return str1.compare(str2) == 0;
 	}
 
-	bool operator >(const string& str1, const string& str2)
+	bool operator > (const string& str1, const string& str2)
 	{
 		return str1.compare(str2) > 0;
 	}
@@ -32,7 +32,7 @@ public:
 	bool operator <(const string& str1, const string& str2)
 	{
 		return str1.compare(str1) < 0;
-	}
+	}*/
 	/////////////////////////////////////////////////
 
 	Node<T>* getHead() {
@@ -148,7 +148,7 @@ public:
 		int noOfOccurances = 0 ;
 		Node<T> * pointer = Head;
 		while (pointer) {
-			if (pionter->getItem() == value) {
+			if (pointer->getItem() == value) {
 				noOfOccurances++;
 			}
 			pointer = pointer->getNext();
@@ -315,7 +315,7 @@ public:
 			return true;
 		}
 		else {
-			Node<T>* ptr1 = Head;
+			Node<T>* p = Head;
 			Node<T>* previousPtr = nullptr;
 			while (p) {
 				if (data == p->getItem()) {
@@ -331,8 +331,8 @@ public:
 					this->InsertEnd(data);
 					return true;
 				}
-				previousPtr = ptr1;
-				ptr1 = ptr1->getNext();
+				previousPtr = p;
+				p = p->getNext();
 			}
 		}
 	}

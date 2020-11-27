@@ -141,6 +141,24 @@
   <ItemGroup>
     <ClCompile Include="Mars Mission Mangament.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArrayStack.h" />
+    <ClInclude Include="BaseStation.h" />
+    <ClInclude Include="CancelationEvent.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="FormulationEvent.h" />
+    <ClInclude Include="Helpers.h" />
+    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="LinkedQueue.h" />
+    <ClInclude Include="Missions.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="PriorityQueue.h" />
+    <ClInclude Include="PriorityQueueNode.h" />
+    <ClInclude Include="PromotionEvent.h" />
+    <ClInclude Include="QueueADT.h" />
+    <ClInclude Include="Rovers.h" />
+    <ClInclude Include="StackADT.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
