@@ -1,6 +1,3 @@
-// Mars Mission Mangament.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -43,8 +40,7 @@ int main()
     //Creating an object of hte base station
     BaseStation baseStation(fileLines);
     baseStation.SetMode(mode);
-    //Calling the start method to intialize the program
-    baseStation.Start();
+
     while (!exit) {
         currentDay++;
         baseStation.Update(currentDay);

@@ -10,6 +10,7 @@ private :
 public:
 	PriorityQueue() {
 		front = nullptr;
+        count = 0;
 	}
 
     bool enqueue(const T& item, int priority) {
