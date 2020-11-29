@@ -10,7 +10,7 @@
 
 using namespace std;
 
-enum MissionType { 
+enum class MissionType { 
 	Emergency_Mission, 
 	Mountainous_Mission, 
 	Polar_Mission 

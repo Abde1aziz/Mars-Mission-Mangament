@@ -3,16 +3,16 @@
 #include "Event.h"
 #include "Helpers.h"
 
-//enum class MissionType {
-//    Emergency_Mission,
-//    Mountainous_Mission,
-//    Polar_Mission
-//};
 
 class FormulationEvent :
     public Event
 {
 private:
+    enum class MissionType {
+        Emergency_Mission,
+        Mountainous_Mission,
+        Polar_Mission
+    };
     MissionType missionType = MissionType::Emergency_Mission;
     int eventDay;
     int missionID;
