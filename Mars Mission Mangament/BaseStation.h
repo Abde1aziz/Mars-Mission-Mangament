@@ -120,6 +120,14 @@ public:
 		mode = m;
 	}
 
+	/*
+	* This function takes an array of string containing the information about the event 
+	* and populate the events queue
+	*/
+	void FromStringToEvents(string eventsArray[], int size) {
+
+	}
+
 	~BaseStation() {
 		delete inputFileLines;
 	}

@@ -18,7 +18,7 @@ private:
 public:
 	Rovers();
 	Rovers(int checkupD, int speed, int id, RoverType);
-	void setRoverType(RoverType roverType);
+	void SetRoverType(RoverType roverType);
 	RoverType  getRovertype();
 	void setCheckupDuration(int CheckupDuration);
 	int getCheckupDuration();
@@ -34,7 +34,7 @@ public:
 
 Rovers::Rovers() {}
 
-Rovers::Rovers(int checkupD, int speed , int id, RoverType type)
+Rovers::Rovers(int checkupD, int speed, int id, RoverType type)
 {
 	checkupDuration = checkupD;
 	roverSpeed = speed;
@@ -45,7 +45,7 @@ Rovers::Rovers(int checkupD, int speed , int id, RoverType type)
 	roverStatus = RoverStatus::Waiting;
 
 }
-void Rovers::setRoverType(RoverType RoverType)
+void Rovers::SetRoverType(RoverType RoverType)
 {
 	roverType = RoverType;
 }
