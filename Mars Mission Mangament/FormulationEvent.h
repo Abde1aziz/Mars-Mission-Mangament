@@ -1,18 +1,16 @@
 #pragma once
 
 #include "Event.h"
-#include "Helpers.h"
-
 
 class FormulationEvent :
     public Event
 {
 private:
-    enum class MissionType {
-        Emergency_Mission,
-        Mountainous_Mission,
-        Polar_Mission
-    };
+    //enum class MissionType {
+    //    Emergency_Mission,
+    //    Mountainous_Mission,
+    //    Polar_Mission
+    //};
     MissionType missionType = MissionType::Emergency_Mission;
     int eventDay;
     int missionID;
@@ -23,18 +21,28 @@ public:
     /*
     * The default constructor. I made it to avoid problems while passing enum as a paramter.
     */
-    FormulationEvent() {}
+    FormulationEvent() {
+        Event::eventType = EventType::Formulation;
+    }
 
     /*
     * A constructor that intialize the data members of the class.
     */
     FormulationEvent(MissionType type, int day, int id, int distance, int timeToComplete, int importance) {
+        Event::eventType = EventType::Formulation;
         missionType = type;
         eventDay = day;
         missionID = id;
         missionTargetLocationDistance = distance;
         daysToComplete = timeToComplete;
         missionSignificance = importance;
+    }
+
+    /*
+    * A getter for the type of the mission to be created
+    */
+    EventType GetEventType() {
+        return Event::eventType;
     }
 
     /*

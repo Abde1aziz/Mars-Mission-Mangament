@@ -17,6 +17,13 @@ public:
     }
 
     /*
+    * A getter for the type of the mission to be created
+    */
+    EventType GetEventType() {
+        return Event::eventType;
+    }
+
+    /*
     * A getter for the event day
     */
     int GetEventDay() {
