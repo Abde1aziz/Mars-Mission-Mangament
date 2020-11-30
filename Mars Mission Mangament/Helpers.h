@@ -2,7 +2,6 @@
 
 #include <sstream>
 #include <string>
-#include "string"
 #include "FormulationEvent.h"
 #include "CancelationEvent.h"
 #include "PromotionEvent.h"
@@ -131,7 +130,7 @@ public :
 	                else {
 	                    numberStr += c;
 	                }
-	                //Check if the second character is empty
+	                //Check if the second character is empty to be sure that there are not a rest to the number
 	                if(str[i+1] == ' '){
 	                	switch(whiteSpaceIndex){
 	                		case 2:

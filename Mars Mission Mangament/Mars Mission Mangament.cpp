@@ -47,11 +47,11 @@ int main()
 
         string input; //it is just a dummy variable to take the user input to pause the program
         switch (mode) {
-        case 1:
+        case 1: //Interactive mode
             cout << "Press any key to continue" << endl;
             cin >> input;
             break;
-        case 2:
+        case 2: //Step by step
             //if the mode is step by step make the program sleep for one second
             this_thread::sleep_for(chrono::seconds(1));
             break;

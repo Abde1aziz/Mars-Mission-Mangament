@@ -14,7 +14,7 @@ private:
 
 	string *inputFileLines;
 	PriorityQueue<Missions> waitingEmergencyMissions;
-	LinkedQueue<Missions> waitingMountainiousMissions;
+	LinkedList<Missions> waitingMountainiousMissions; // but it behaves like a queue delete node from begining and add node to the end
 	LinkedQueue<Missions> waitingPolarMissions;
 	LinkedQueue<Event> events;
 	LinkedList<Missions> inExecutionMissions;
@@ -110,6 +110,14 @@ public:
 	 *This function is called at every time step and takes the current time step number
 	 */
 	void Update(int currentDay) {
+		//Peek to the queue event 
+		//if the event day of the event == the current day
+		// then dequeue
+		//check for the event type [formulation - cancelation - promotion]
+		//switch for every event type
+		//for formulation create mission 
+		//if the mission mountainous you will mission to the end of the list
+		//for cancelation check for the id in mountainous missions
 
 	}
 	
