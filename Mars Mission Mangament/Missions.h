@@ -1,38 +1,41 @@
 #pragma once
 #include "Helpers.h"
+#include "Rovers.h"
 
 class Missions
 {
 private:
 	double targetLocationDistance;
 	double significance;
-	int missionID; 
+	int missionID;
 	double missionDuration;
 	int assignmentDay;
 	int finishDay;
-	int dayToReachLocation; 
-	int dayToCompleteMission; 
-	int formulationDay;	
-	int missionType;	
-	// Rover typrOfAssignedRover;
-	// Rover assignedRover ;
-	
+	int dayToReachLocation;
+	int dayToCompleteMission;
+	int formulationDay;
+	int missionType;
+	int typrOfAssignedRover;
+	Rovers assignedRover;
+
 public:
-	void SetTargetLocationDistance( double TargetLocationDistance);
+	Missions() {}
+	Missions(int ID);
+	void SetTargetLocationDistance(double TargetLocationDistance);
 	double GetTargetLocationDistance() const;
 	void SetSignificance(double Signficance);
 	double GetSignificance() const;
 	void SetMissionID(int MissionID);
-	int GetMissionID() const; 
+	int GetMissionID() const;
 	void SetMissionDuration(double MissionDuration);
-    double GetMissionDuration () const;
-	void SetAssignmentDay (int AssDay);
+	double GetMissionDuration() const;
+	void SetAssignmentDay(int AssDay);
 	int GetAssignmentDay() const;
-	void SetFinishDay( int FinishDay);
+	void SetFinishDay(int FinishDay);
 	int GetFinishDay() const;
 	void SetDayToReachLocation(int DayReachLocation);
 	int GetDayToReachLocation() const;
-	void SetDayToCompleteMission(int DayComMission) ;
+	void SetDayToCompleteMission(int DayComMission);
 	int GetDayToCompleteMission() const;
 	void SetFormulationDay(int FormualtionDay);
 	int GetFormulationDay() const;
@@ -40,6 +43,11 @@ public:
 	int GetMissionType() const;
 	/// rest of functions
 };
+
+Missions::Missions(int ID)
+{
+	missionID = ID;
+}
 
 void Missions::SetTargetLocationDistance(double TargetLocationDistance) {
 	targetLocationDistance = TargetLocationDistance;
@@ -51,7 +59,7 @@ void Missions::SetSignificance(double Significance) {
 	significance = Significance;
 }
 double Missions::GetSignificance() const {
-	return significance; 
+	return significance;
 }
 void Missions::SetMissionID(int MissionID) {
 	missionID = MissionID;
@@ -71,7 +79,7 @@ void Missions::SetAssignmentDay(int AssDay) {
 int Missions::GetAssignmentDay() const {
 	return assignmentDay;
 }
-void Missions::SetFinishDay( int FinishDay) {
+void Missions::SetFinishDay(int FinishDay) {
 	finishDay = FinishDay;
 }
 int Missions::GetFinishDay() const {
