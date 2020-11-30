@@ -104,6 +104,10 @@ public:
 			Rovers eRover(emergencyCheckupDuration, emergencyRoversSpeed, availabeMountainiousRoversNo + availabePolarRoversNo + i + 1, EMERGENCY_ROVER);
 			availableEmergencyRovers.InsertBeg(eRover);
 		}
+
+		//Creating events objects
+		FromStringToEvents(&inputFileLines[5], numberOfEvents);
+
 	}
 	
 	/*
@@ -132,8 +136,18 @@ public:
 	* This function takes an array of string containing the information about the event 
 	* and populate the events queue
 	*/
-	void FromStringToEvents(string eventsArray[], int size) {
-
+	void FromStringToEvents(string * eventsArray, int size) {
+		for (int i = 0; i < size; i++) {
+			if (eventsArray[i][0] == 'F' || eventsArray[i][0] == 'f') {
+				events.enqueue(Helper::ConvertStringToFormulationEvent(eventsArray[i]));
+			}
+			else if (eventsArray[i][0] == 'X' || eventsArray[i][0] == 'x') {
+				events.enqueue(Helper::ConvertStringToCancelationEvent(eventsArray[i]));
+			}
+			else if (eventsArray[i][0] == 'P' || eventsArray[i][0] == 'p') {
+				events.enqueue(Helper::ConvertStringToPromotionEvent(eventsArray[i]));
+			}
+		}
 	}
 
 	~BaseStation() {

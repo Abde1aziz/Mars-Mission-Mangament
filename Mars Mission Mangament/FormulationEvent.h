@@ -52,6 +52,10 @@ public:
         missionSignificance = importance;
     }
 
+    int GetEventType() {
+        return FORMULATION_EVENT;
+    }
+
     /*
     * A getter for the type of the mission to be created
     */

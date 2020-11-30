@@ -8,19 +8,17 @@ private:
     int eventDay;
     int missionID;
 public:
-
-    enum class MissionType {
-        Emergency_Mission,
-        Mountainous_Mission,
-        Polar_Mission
-    };
-
     /*
     * Constructor for the class that intialize the data members
     */
-    PromotionEvent(int day, int id) {
+    PromotionEvent(int day, int id)
+    :Event(PROMOTION_EVENT, MOUNTAINOUS_MISSION, day, id){
         eventDay = day;
         missionID = id;
+    }
+
+    int GetEventType() {
+        return  PROMOTION_EVENT;
     }
 
     /*

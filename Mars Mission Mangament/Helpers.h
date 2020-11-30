@@ -141,6 +141,8 @@ public :
 				}
 			}
 		}
+		FormulationEvent evnt(missionType, eventDay, id, missionTargetLocationDistance, daysToComplete, missionSignificance);
+		return evnt;
     }
     
     static CancelationEvent ConvertStringToCancelationEvent(string str){
@@ -184,6 +186,8 @@ public :
 				
 			}
 		}
+		CancelationEvent evnt(eventDay, id);
+		return evnt;
 	}
 	
 	static PromotionEvent ConvertStringToPromotionEvent(string str){
@@ -226,5 +230,7 @@ public :
 	                isWhiteSpace = false;
 			}
 		}
+		PromotionEvent evnt(eventDay, id);
+		return evnt;
 	}
 };
