@@ -1,17 +1,36 @@
 #pragma once
+
 #include "Helpers.h"
 
 class Event
 {
 protected:
-	EventType eventType;
+	int eventType;
+	int missionType;
+	int eventDay;
+	int missionID;
+
 public:
-	
-	virtual EventType GetEventType() {
+	Event(){}
+
+	Event(int eType, int mType, int day, int id) {
+		eventType = eType;
+		missionType = mType;
+		eventDay = day;
+		missionID = id;
+	}
+	virtual int GetEventType() {
 		return eventType;
 	}
-	virtual MissionType GetMissionType() = 0;
-	virtual int GetEventDay() = 0;
-	virtual int GetMissionID() = 0;
+
+	virtual int GetMissionType() {
+		return missionType;
+	}
+	virtual int GetEventDay() {
+		return eventDay;
+	}
+	virtual int GetMissionID() {
+		return missionID;
+	}
 };
 

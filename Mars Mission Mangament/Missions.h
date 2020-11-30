@@ -13,7 +13,7 @@ private:
 	int dayToReachLocation; 
 	int dayToCompleteMission; 
 	int formulationDay;	
-	MissionType missionType;	
+	int missionType;	
 	// Rover typrOfAssignedRover;
 	// Rover assignedRover ;
 	
@@ -36,8 +36,8 @@ public:
 	int GetDayToCompleteMission() const;
 	void SetFormulationDay(int FormualtionDay);
 	int GetFormulationDay() const;
-	void SetMissionType(MissionType missionType);
-	MissionType GetMissionType() const;
+	void SetMissionType(int missionType);
+	int GetMissionType() const;
 	/// rest of functions
 };
 
@@ -95,10 +95,10 @@ void Missions::SetFormulationDay(int FormulationDay) {
 int Missions::GetFormulationDay() const {
 	return formulationDay;
 }
-void  Missions::SetMissionType(MissionType missionType) {
+void  Missions::SetMissionType(int missionType) {
 	missionType = missionType;
 }
 //There is an error, he can not define the type MissionType enum 
-MissionType Missions::GetMissionType() const {
+int Missions::GetMissionType() const {
 	return missionType;
 }

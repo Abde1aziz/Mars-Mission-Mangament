@@ -89,19 +89,19 @@ public:
 		//*Creating rover objects
 		//Mountainious Rovers
 		for (int i = 0; i < availabeMountainiousRoversNo; i++) {
-			Rovers mRover(mountainCheckupDuration, mountainRoversSpeed, i+1, RoverType::Mountainous_Rover);
+			Rovers mRover(mountainCheckupDuration, mountainRoversSpeed, i+1, MOUNTAINOUS_ROVER);
 			availableMountainiousRovers.InsertBeg(mRover);
 		}
 
 		//Polar Rovers
 		for (int i = 0; i < availabePolarRoversNo; i++) {
-			Rovers pRover(polarCheckupDuration, polarRoversSpeed, availabeMountainiousRoversNo + i + 1, RoverType::Polar_Rover);
+			Rovers pRover(polarCheckupDuration, polarRoversSpeed, availabeMountainiousRoversNo + i + 1, POLAR_ROVER);
 			availablePolarRovers.InsertBeg(pRover);
 		}
 
 		//Emergency Rovers
 		for (int i = 0; i < availabeEmergencyRoversNo; i++) {
-			Rovers eRover(emergencyCheckupDuration, emergencyRoversSpeed, availabeMountainiousRoversNo + availabePolarRoversNo + i + 1, RoverType::Emergency_Rover);
+			Rovers eRover(emergencyCheckupDuration, emergencyRoversSpeed, availabeMountainiousRoversNo + availabePolarRoversNo + i + 1, EMERGENCY_ROVER);
 			availableEmergencyRovers.InsertBeg(eRover);
 		}
 	}

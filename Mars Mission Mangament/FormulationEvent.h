@@ -1,35 +1,49 @@
 #pragma once
 
 #include "Event.h"
+#include "Helpers.h"
+
+#define MOUNTAINOUS_MISSION 1
+#define POLAR_MISSION 2
+#define EMERGENCY_MISSION 3
+#define MOUNTAINOUS_ROVER 4
+#define POLAR_ROVER 5
+#define EMERGENCY_ROVER 6
+#define FORMULATION_EVENT 7
+#define CANCELATION_EVENT 8
+#define PROMOTION_EVENT 9
+#define AWAITING_FORMULATION_MISSION 10
+#define WATING_MISSION 11
+#define IN_EXECUTION_MISSION 12
+#define CANCELED_MISSION 13
+#define COMPOLETED_MISSION 14
+#define IN_MISSION_ROVER 15
+#define WAITING_ROVER 16
+#define DOING_CHECKUP_ROVER 17
 
 class FormulationEvent :
     public Event
 {
 private:
-    //enum class MissionType {
-    //    Emergency_Mission,
-    //    Mountainous_Mission,
-    //    Polar_Mission
-    //};
-    MissionType missionType = MissionType::Emergency_Mission;
+    /*enum class MissionType {
+        Emergency_Mission,
+        Mountainous_Mission,
+        Polar_Mission
+    };*/
+    int missionType = EMERGENCY_MISSION;
     int eventDay;
     int missionID;
     int missionTargetLocationDistance;
     int daysToComplete;
     int missionSignificance;
 public:
-    /*
-    * The default constructor. I made it to avoid problems while passing enum as a paramter.
-    */
-    FormulationEvent() {
-        Event::eventType = EventType::Formulation;
-    }
 
+    FormulationEvent():Event(){}
     /*
     * A constructor that intialize the data members of the class.
     */
-    FormulationEvent(MissionType type, int day, int id, int distance, int timeToComplete, int importance) {
-        Event::eventType = EventType::Formulation;
+    FormulationEvent(int type, int day, int id, int distance, int timeToComplete, int importance)
+        : Event(FORMULATION_EVENT, type, day, id) {
         missionType = type;
         eventDay = day;
         missionID = id;
@@ -41,14 +55,7 @@ public:
     /*
     * A getter for the type of the mission to be created
     */
-    EventType GetEventType() {
-        return Event::eventType;
-    }
-
-    /*
-    * A getter for the type of the mission to be created
-    */
-    MissionType GetMissionType() {
+    int GetMissionType() {
         return missionType;
     }
 

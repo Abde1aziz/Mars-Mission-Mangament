@@ -9,37 +9,23 @@
 
 using namespace std;
 
-enum class MissionType { 
-	Emergency_Mission, 
-	Mountainous_Mission, 
-	Polar_Mission 
-};
-
-enum class RoverType {
-	Emergency_Rover,
-	Mountainous_Rover,
-	Polar_Rover
-};
-
-enum class EventType {
-	Formulation,
-	Cancelation,
-	Promotion
-};
-
-enum class RoverStatus {
-    In_Mission,
-    Waiting,
-    Doing_Checkup
-};
-
-enum class MissionStatus {
-    Awaiting_Formulation,
-    Waiting,
-    In_Execution,
-    Canceled,
-    Completed
-};
+#define MOUNTAINOUS_MISSION 1
+#define POLAR_MISSION 2
+#define EMERGENCY_MISSION 3
+#define MOUNTAINOUS_ROVER 4
+#define POLAR_ROVER 5
+#define EMERGENCY_ROVER 6
+#define FORMULATION_EVENT 7
+#define CANCELATION_EVENT 8
+#define PROMOTION_EVENT 9
+#define AWAITING_FORMULATION_MISSION 10
+#define WATING_MISSION 11
+#define IN_EXECUTION_MISSION 12
+#define CANCELED_MISSION 13
+#define COMPOLETED_MISSION 14
+#define IN_MISSION_ROVER 15
+#define WAITING_ROVER 16
+#define DOING_CHECKUP_ROVER 17
 
 class Helper {
 public :
@@ -93,8 +79,8 @@ public :
 
     static FormulationEvent ConvertStringToFormulationEvent(string str) {
     	
-        EventType eventType = EventType::Formulation;
-        MissionType missionType;
+        int eventType = FORMULATION_EVENT;
+        int missionType;
         int eventDay;
         int id;
         int missionTargetLocationDistance;
@@ -117,11 +103,11 @@ public :
 			}else{
 				if(whiteSpaceIndex == 1){
 					if(c =='M'|| c== 'm'){
-						missionType = MissionType::Mountainous_Mission;
+						missionType = MOUNTAINOUS_MISSION;
 					}else if(c == 'p' || c == 'P'){
-						missionType = MissionType::Polar_Mission;
+						missionType = POLAR_MISSION;
 					}else if(c == 'e' || c == 'E'){
-						missionType = MissionType::Emergency_Mission;
+						missionType = EMERGENCY_MISSION;
 					}
 				}else{
 					if (isWhiteSpace) {
@@ -158,7 +144,7 @@ public :
     }
     
     static CancelationEvent ConvertStringToCancelationEvent(string str){
-    	EventType eventType = EventType::Cancelation;
+		int eventType = CANCELATION_EVENT;
         int eventDay;
         int id;
 
@@ -201,7 +187,7 @@ public :
 	}
 	
 	static PromotionEvent ConvertStringToPromotionEvent(string str){
-		EventType eventType = EventType::Promotion;
+		int eventType = PROMOTION_EVENT;
         int eventDay;
         int id;
 
