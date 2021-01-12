@@ -219,7 +219,7 @@ public:
 						if (pointer->getItem().GetMissionID() == id) {
 							pointer->getItem().PromoteMission(currentDay);
 							waitingEmergencyMissions.enqueue(pointer->getItem(), pointer->getItem().GetSignificance());
-							
+
 							waitingMountainiousMissions.DeleteFirst();
 							waitingEmergencyMissionsNo = waitingEmergencyMissions.getCount();
 							waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
@@ -229,6 +229,8 @@ public:
 
 				}
 			}
+			else
+				break;
 		}
 
 		/* 
@@ -488,10 +490,12 @@ public:
 		
 
 		Exit(currentDay);
-		ui.OutputMode(currentDay, availablePolarRovers, availableMountainiousRovers, availableEmergencyRovers,
-			waitingPolarMissions, waitingMountainiousMissions, waitingEmergencyMissions, inExecutionMissions, finishedMissions,
-			lastDayMissionsAndRovers, waitingPolarMissionsNo, waitingEmergencyMissionsNo, waitingMountaniousMissionsNo, availabePolarRoversNo, 
-			availabeEmergencyRoversNo, availabeMountainiousRoversNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo);
+
+			ui.OutputMode(currentDay, availablePolarRovers, availableMountainiousRovers, availableEmergencyRovers,
+				waitingPolarMissions, waitingMountainiousMissions, waitingEmergencyMissions, inExecutionMissions, finishedMissions,
+				lastDayMissionsAndRovers, waitingPolarMissionsNo, waitingEmergencyMissionsNo, waitingMountaniousMissionsNo, availabePolarRoversNo, 
+				availabeEmergencyRoversNo, availabeMountainiousRoversNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo);
+
 		lastDayMissionsAndRovers = todaysAssignedMissionsAndRovers;
 
 	}
@@ -499,8 +503,8 @@ public:
 
 
 void Exit(int currentDay) {
-	if (events.isEmpty() && waitingEmergencyMissions.isEmpty() && waitingMountainiousMissions.isEmpty() && waitingPolarMissions.isEmpty() && inExecutionMissions.isEmpty()) {
-		isExit == true;
+	if (events.isEmpty() && waitingEmergencyMissions.isEmpty() && waitingMountainiousMissions.isEmpty() && waitingPolarMissions.isEmpty() && inExecutionMissions.isEmpty(), events.isEmpty()) {
+		isExit = true;
 		ui.OutputFile(currentDay, finishedMissions);
 	}
 }
@@ -529,6 +533,7 @@ void BaseStation::SetMode(int m) {
 
 void BaseStation::FromStringToEvents(string* eventsArray, int size) {
 	for (int i = 0; i < size; i++) {
+		
 		if (eventsArray[i][0] == 'F' || eventsArray[i][0] == 'f') {
 			events.enqueue(Helper::ConvertStringToFormulationEvent(eventsArray[i]));
 		}

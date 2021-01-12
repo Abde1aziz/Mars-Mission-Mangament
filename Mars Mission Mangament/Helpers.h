@@ -93,6 +93,7 @@ public :
         int numberInt;
         for (int i = 1; i<str.length();i++){
         	char c = str[i];
+			cout << c << " ";
         	if(c == ' '){
         		if(!isWhiteSpace){
         			whiteSpaceIndex++;
@@ -142,6 +143,7 @@ public :
 				}
 			}
 		}
+		cout << endl;
 		//int type, int day, int id, int distance, int MDUR, int importance, int FinishDay
 		FormulationEvent evnt(missionType, eventDay, id, missionTargetLocationDistance, daysToComplete, missionSignificance);
 		return evnt;
