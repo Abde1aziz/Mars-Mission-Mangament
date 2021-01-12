@@ -34,7 +34,7 @@ public:
 	virtual int GetMissionID() {
 		return missionID;
 	}
-	virtual int GetDistance() {
+	/*virtual int GetDistance() {
 		return missionTargetLocationDistance;
 	}
 
@@ -46,6 +46,6 @@ public:
 
 	virtual int GetSignificance() {
 		return missionSignificance;
-	}
+	}*/
 };
 

@@ -110,6 +110,7 @@ public :
 						missionType = EMERGENCY_MISSION;
 					}
 				}else{
+					missionType = 0;
 					if (isWhiteSpace) {
                     numberStr = c;
 	                }
@@ -141,6 +142,7 @@ public :
 				}
 			}
 		}
+		//int type, int day, int id, int distance, int MDUR, int importance, int FinishDay
 		FormulationEvent evnt(missionType, eventDay, id, missionTargetLocationDistance, daysToComplete, missionSignificance);
 		return evnt;
     }

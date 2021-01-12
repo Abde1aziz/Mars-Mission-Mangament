@@ -14,6 +14,7 @@ private:
 	int timeToFinishCheckup;
 	int roverStatus;
 	int roverType;
+	int day2CompleteCheckup;
 
 public:
 	Rovers();
@@ -38,6 +39,19 @@ public:
 	void CompleteRoverMission() {
 		roverStatus = WAITING_ROVER;
 		numberOfMissionsCompleted++;
+	}
+
+	void DoCheckup(int currentDay, int checkupD) {
+		day2CompleteCheckup = currentDay + checkupD;
+	}
+
+	void FinishCheckup() {
+		day2CompleteCheckup = 0;
+		numberOfMissionsCompleted = 0;
+	}
+
+	int GetDay2CompleteCheckup() {
+		return day2CompleteCheckup;
 	}
 };
 

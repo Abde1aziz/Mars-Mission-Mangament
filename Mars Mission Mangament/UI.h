@@ -136,12 +136,12 @@ public:
 			myfile << "  CD      ID      FD      WD      ED      .\n";
 			// WD   WD = AssignmentDay - FD
 			// ED   ED = CD - AssignmentDay
-			int CD = CompletedMiss->getItem().GetFinishDay();
+			int CD = CompletedMiss->getItem().GetCompleteDay();
 			int ID = CompletedMiss->getItem().GetMissionID();
 			int FD = CompletedMiss->getItem().GetFormulationDay();
 			// 
-			int WD = CompletedMiss->getItem().GetAssignmentDay() - FD;
-			int ED = CD - CompletedMiss->getItem().GetAssignmentDay();
+			int WD = CompletedMiss->getItem().GetAssignemtDay() - FD;
+			int ED = CD - CompletedMiss->getItem().GetAssignemtDay();
 			//
 			myfile << CD << ID << FD << WD << ED << endl;
 			myfile.close();

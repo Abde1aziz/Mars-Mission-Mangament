@@ -16,9 +16,18 @@ public:
     int getCount() {
         return count;
     }
+    bool isEmpty() {
+        if (count == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     bool enqueue(const T& item, int priority) {
         PriorityQueueNode<T>* t, * q;
         t = new PriorityQueueNode<T>();
+        q = new PriorityQueueNode<T>();
         t->setItem(item);
         t->setPriority(priority);
         if (front == nullptr || priority > front->getPriority()) {

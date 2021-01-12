@@ -19,6 +19,9 @@ public:
 		count = 0;
 		Head = nullptr;
 	}
+	bool isEmpty() {
+		return count == 0;
+	}
 	/*bool operator == (const string& str1, const string& str2)
 	{
 		return str1.compare(str2) == 0;

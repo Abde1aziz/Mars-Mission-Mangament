@@ -37,7 +37,7 @@ private:
     int missionTargetLocationDistance;
     int daysToCompletefullfillRequirement;
     int missionSignificance;
-    int finishDay;
+  
 public:
 
     FormulationEvent() :Event() {}
@@ -45,7 +45,7 @@ public:
     * A constructor that intialize the data members of the class.
     */
     // MDUR the number of days needed to fulfill the mission requirements at target location.
-    FormulationEvent(int type, int day, int id, int distance, int MDUR, int importance, int FinishDay)
+    FormulationEvent(int type, int day, int id, int distance, int MDUR, int importance)
         : Event(FORMULATION_EVENT, type, day, id) {
         missionType = type;
         eventDay = day;
@@ -53,7 +53,6 @@ public:
         missionTargetLocationDistance = distance;
         daysToCompletefullfillRequirement = MDUR;
         missionSignificance = importance;
-        finishDay = eventDay + timeToComplete;
     }
 
     int GetEventType() {
@@ -88,10 +87,7 @@ public:
         return missionTargetLocationDistance;
     }
 
-    int GetFinishDay()
-    {
-        return finishDay;
-    }
+   
     /*
     * A getter for the number it takes to finish the mission
     */

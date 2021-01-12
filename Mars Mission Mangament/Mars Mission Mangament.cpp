@@ -56,7 +56,7 @@ int main()
             this_thread::sleep_for(chrono::seconds(1));
             break;
         }
-        exit = true;
+        exit = baseStation.GetIsExit();
     }
 }
 

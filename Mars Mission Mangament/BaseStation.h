@@ -10,6 +10,7 @@
 #include <cmath>
 #include <iostream>
 #include "UI.h"
+#include <string>
 
 using namespace std;
 class BaseStation
@@ -202,7 +203,9 @@ public:
 					while (pointer)
 					{
 						if (pointer->getItem().GetMissionID() == CE.GetMissionID())
-							waitingMountainiousMissions.DeleteNode(pointer->getItem());
+							waitingMountainiousMissions.DeleteFirst();
+						else
+							pointer = pointer->getNext();
 						waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
 
 					}
@@ -217,7 +220,7 @@ public:
 							pointer->getItem().PromoteMission(currentDay);
 							waitingEmergencyMissions.enqueue(pointer->getItem(), pointer->getItem().GetSignificance());
 							
-							waitingMountainiousMissions.DeleteNode(pointer->getItem());
+							waitingMountainiousMissions.DeleteFirst();
 							waitingEmergencyMissionsNo = waitingEmergencyMissions.getCount();
 							waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
 
@@ -240,89 +243,264 @@ public:
 		while(waitingEmergencyMissions.peek(Mission)){
 			waitingEmergencyMissions.dequeue(Mission);
 			waitingEmergencyMissionsNo = waitingEmergencyMissions.getCount();
+			Node<Rovers>* polarrover = availablePolarRovers.getHead();
+			Node<Rovers>* emergencyrover = availableEmergencyRovers.getHead();
+			Node<Rovers>* Mountainousrover = availableMountainiousRovers.getHead();
 			if (availableEmergencyRovers.getHead())
 			{
-				inExecutionMissions.InsertBeg(Mission);
-				Mission.AssignRover(currentDay, emergencyrover);
+				inExecutionMissions.InsertEnd(Mission);
+				Mission.AssignRover(currentDay, emergencyrover, EMERGENCY_ROVER);
 				emergencyrover->getItem().AssignRover2Mission();
 				inMissionRovers.InsertEnd(emergencyrover->getItem());
-				availableEmergencyRovers.DeleteNode(emergencyrover->getItem());
+				availableEmergencyRovers.DeleteFirst();
 				availabeEmergencyRoversNo = availableEmergencyRovers.getCount();
+				todaysAssignedMissionsAndRovers.enqueue("E" + to_string(emergencyrover->getItem().getID()) + "-> E" + to_string(Mission.GetMissionID()));
 			}
 			else if (availableMountainiousRovers.getHead())
 			{
-				inExecutionMissions.InsertBeg(Mission);
-				Mission.AssignRover(currentDay, Mountainousrover);
+				inExecutionMissions.InsertEnd(Mission);
+				Mission.AssignRover(currentDay, Mountainousrover, MOUNTAINOUS_ROVER);
 				Mountainousrover->getItem().AssignRover2Mission();
 				inMissionRovers.InsertEnd(Mountainousrover->getItem());
-				availableMountainiousRovers.DeleteNode(Mountainousrover->getItem());
+				availableMountainiousRovers.DeleteFirst();
 				availabeMountainiousRoversNo = availableMountainiousRovers.getCount();
+				todaysAssignedMissionsAndRovers.enqueue("M" + to_string(Mountainousrover->getItem().getID()) + "-> E" + to_string(Mission.GetMissionID()));
 				
 			}
 			else if (availablePolarRovers.getHead())
 			{
-				inExecutionMissions.InsertBeg(Mission);
-				Mission.AssignRover(currentDay, polarrover);
+				inExecutionMissions.InsertEnd(Mission);
+				Mission.AssignRover(currentDay, polarrover, POLAR_ROVER);
 				polarrover->getItem().AssignRover2Mission();
 				inMissionRovers.InsertEnd(polarrover->getItem());
-				availablePolarRovers.DeleteNode(polarrover->getItem());
+				availablePolarRovers.DeleteFirst();
 				availabePolarRoversNo = availablePolarRovers.getCount();
+
+				todaysAssignedMissionsAndRovers.enqueue("P" + to_string(polarrover->getItem().getID()) + "-> E" + to_string(Mission.GetMissionID()));
 			}
 		}
 		//assigning for MountauniousMission
-		while (waitingMountainiousMissions.getHead() != nullptr) {
+		while (waitingMountainiousMissions.getHead() != nullptr && availableMountainiousRovers.getHead() != nullptr && availablePolarRovers.getHead()!= nullptr) {
 
 			Mission = waitingMountainiousMissions.getHead()->getItem();
-
+			waitingMountainiousMissions.DeleteFirst();
+			waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
+			Node<Rovers>* polarrover = availablePolarRovers.getHead();
+			Node<Rovers>* Mountainousrover = availableMountainiousRovers.getHead();
 			if (availableMountainiousRovers.getHead())
 			{
-				inExecutionMissions.InsertBeg(waitingMountainiousMissions.getHead()->getItem());
-				availabeMountainiousRoversNo--;
-				Mission.AssignRover(currentDay, Mountainousrover);
+				inExecutionMissions.InsertEnd(Mission);
+				Mission.AssignRover(currentDay, Mountainousrover, MOUNTAINOUS_ROVER);
+				polarrover->getItem().AssignRover2Mission();
+				inMissionRovers.InsertEnd(Mountainousrover->getItem());
+				availablePolarRovers.DeleteFirst();
+				availabeMountainiousRoversNo = availableMountainiousRovers.getCount();
+
+				todaysAssignedMissionsAndRovers.enqueue("M" + to_string(Mountainousrover->getItem().getID()) + "-> M" + to_string(Mission.GetMissionID()));
 			}
 			else if (availablePolarRovers.getHead())
 			{
+				inExecutionMissions.InsertEnd(Mission);
+				Mission.AssignRover(currentDay, polarrover, POLAR_ROVER);
+				polarrover->getItem().AssignRover2Mission();
+				inMissionRovers.InsertEnd(polarrover->getItem());
+				availablePolarRovers.DeleteFirst();
 				waitingPolarMissions.dequeue(Mission);
 				inExecutionMissions.InsertBeg(Mission);
 				availabePolarRoversNo--;
-				Mission.AssignRover(currentDay, polarrover);
+				Mission.AssignRover(currentDay, polarrover, POLAR_ROVER);
+				todaysAssignedMissionsAndRovers.enqueue("P" + to_string(polarrover->getItem().getID()) + "-> M" + to_string(Mission.GetMissionID()));
 
 			}
 		}
-		//assigning for PolarMission
-		if (availablePolarRovers.getHead())
-		{
-			waitingPolarMissions.dequeue(Mission);
-			inExecutionMissions.InsertBeg(Mission);
-			availabePolarRoversNo--;
-			Mission.AssignRover(currentDay, polarrover);
 
+		//assigning for PolarMission
+		while (waitingPolarMissions.peek(Mission) && availablePolarRovers.getHead()!= nullptr) {
+			waitingPolarMissions.dequeue(Mission);
+			waitingPolarMissionsNo--;
+			Node<Rovers>* polarrover = availablePolarRovers.getHead();
+			if (availablePolarRovers.getHead())
+			{
+				availabePolarRoversNo--;
+
+				inExecutionMissions.InsertEnd(Mission);
+				Mission.AssignRover(currentDay, polarrover, POLAR_ROVER);
+				polarrover->getItem().AssignRover2Mission();
+				inMissionRovers.InsertEnd(polarrover->getItem());
+				availablePolarRovers.DeleteFirst();
+				waitingPolarMissions.dequeue(Mission);
+				inExecutionMissions.InsertBeg(Mission);
+				availabePolarRoversNo--;
+				Mission.AssignRover(currentDay, polarrover, POLAR_ROVER);
+				todaysAssignedMissionsAndRovers.enqueue("P" + to_string(polarrover->getItem().getID()) + "-> P" + to_string(Mission.GetMissionID()));
+
+
+			}
 		}
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		/*
 		* inExecution to completed
 		*/
-
-		if (remainder(currentDay, 5) == 0)
+		Node<Missions>* p = inExecutionMissions.getHead();
+		while (p) 
 		{
+			if (p->getItem().GetCompleteDay() == currentDay) {
+				finishedMissions.InsertEnd(p->getItem());
+				inExecutionMissions.DeleteFirst();
+				Rovers rover = p->getItem().GetRover()->getItem();
+				rover.CompleteRoverMission();
+				 	
+				if (p->getItem().GetRoverType() == EMERGENCY_ROVER)
+				{
+					availableEmergencyRovers.InsertEnd(rover);
+					availabeEmergencyRoversNo = availableEmergencyRovers.getCount();
+
+					if (rover.getNumberOfMissionsCompleted() == completedMissionsToCheckupNo) {
+						rover.DoCheckup(currentDay, emergencyCheckupDuration);
+						roverCheckUpList.InsertEnd(rover);
+
+					}
+				}
+				else if (p->getItem().GetRoverType() == POLAR_ROVER)
+				{
+					availablePolarRovers.InsertEnd(rover);
+					availabePolarRoversNo = availablePolarRovers.getCount();
+					if (rover.getNumberOfMissionsCompleted() == completedMissionsToCheckupNo) {
+
+						rover.DoCheckup(currentDay, polarCheckupDuration);
+						roverCheckUpList.InsertEnd(rover);
+					}
+				}
+				else if (p->getItem().GetRoverType() == MOUNTAINOUS_ROVER)
+
+				{
+					availableMountainiousRovers.InsertEnd(rover);
+					availabeMountainiousRoversNo = availableMountainiousRovers.getCount();
+					if (rover.getNumberOfMissionsCompleted() == completedMissionsToCheckupNo) {
+
+						rover.DoCheckup(currentDay, mountainCheckupDuration);
+						roverCheckUpList.InsertEnd(rover);
+					}
+				}
+				
+				p = p->getNext();
+				
+			}
+			else {
+				p = p->getNext();
+			}
+
+		}
+		
 
 			Node<Missions>* completedmission = inExecutionMissions.getHead();
 
 			if (completedmission)
 			{
 				finishedMissions.InsertBeg(completedmission->getItem());
-			}
-		}
+				if (completedmission->getItem().GetRoverType() == EMERGENCY_ROVER)
+				{
+					availabeEmergencyRoversNo++;
+					Rovers rover(mountainCheckupDuration, mountainRoversSpeed, availabeEmergencyRoversNo, EMERGENCY_ROVER);
+					roverCheckUpList.InsertBeg(rover);
+				}
+				else if (completedmission->getItem().GetRoverType() == POLAR_ROVER)
+				{
+					availabeMountainiousRoversNo++;
+					Rovers rover(polarCheckupDuration, polarRoversSpeed, availabeMountainiousRoversNo, POLAR_ROVER);
+					roverCheckUpList.InsertBeg(rover);
+				}
+				else if (completedmission->getItem().GetRoverType() == MOUNTAINOUS_ROVER)
 
-		Exit();
+				{
+					availabePolarRoversNo++;
+					Rovers rover(mountainCheckupDuration, mountainRoversSpeed, availabePolarRoversNo, MOUNTAINOUS_ROVER);
+					roverCheckUpList.InsertBeg(rover);
+				}
+					
+			}
+
+		
+		Node<Rovers>* Ro = roverCheckUpList.getHead();
+		
+		while (Ro)
+		{
+			Node<Missions>* Completedmission = finishedMissions.getHead();
+			while (Completedmission)
+			{
+				Node<Rovers>* Rov = roverCheckUpList.getHead();
+				int rovername = Completedmission->getItem().GetRoverType();
+				if (Ro->getItem().getRovertype() == rovername)
+					if (Ro->getItem().getCheckupDuration() == (currentDay - Completedmission->getItem().GetCompleteDay()))
+					{
+						roverCheckUpList.DeleteFirst();
+						
+					}
+
+
+				Rov->getNext();
+				Completedmission->getNext();
+
+
+			}
+			if (Ro->getItem().getRovertype() == EMERGENCY_ROVER)
+			{
+				Rovers rove(emergencyCheckupDuration, emergencyRoversSpeed, Ro->getItem().getID(), EMERGENCY_ROVER);
+				availableEmergencyRovers.InsertBeg(rove);
+			}
+			else if (Ro->getItem().getRovertype() == MOUNTAINOUS_ROVER)
+			{
+				Rovers rove(mountainCheckupDuration, mountainRoversSpeed, Ro->getItem().getID(), MOUNTAINOUS_ROVER);
+				availableEmergencyRovers.InsertBeg(rove);
+			}
+			else if (Ro->getItem().getRovertype() == POLAR_ROVER)
+			{
+				Rovers rove(polarCheckupDuration, polarRoversSpeed, Ro->getItem().getID(), POLAR_ROVER);
+				availableEmergencyRovers.InsertBeg(rove);
+			}
+			Ro->getNext();
+
+		}
+		
+		//Check if the rover finished checkup
+		Node<Rovers>* p2 = roverCheckUpList.getHead();
+		while (p2) {
+			if (p2->getItem().GetDay2CompleteCheckup() == currentDay) {
+				Rovers r = p2->getItem();
+				r.FinishCheckup();
+				if (r.getRovertype() == EMERGENCY_ROVER) {
+					availableEmergencyRovers.InsertEnd(r);
+					availabeEmergencyRoversNo = availableEmergencyRovers.getCount();
+				}
+				else if (r.getRovertype() == MOUNTAINOUS_ROVER) {
+					availableMountainiousRovers.InsertEnd(r);
+					availabeMountainiousRoversNo++;
+				}
+				else if (r.getRovertype() == POLAR_ROVER){
+					availablePolarRovers.InsertEnd(r);
+					availabePolarRoversNo++;
+				}
+				p2 = p2->getNext();
+			}else
+				p2 = p2->getNext();
+		}
+		
+
+		Exit(currentDay);
+		ui.OutputMode(currentDay, availablePolarRovers, availableMountainiousRovers, availableEmergencyRovers,
+			waitingPolarMissions, waitingMountainiousMissions, waitingEmergencyMissions, inExecutionMissions, finishedMissions,
+			lastDayMissionsAndRovers, waitingPolarMissionsNo, waitingEmergencyMissionsNo, waitingMountaniousMissionsNo, availabePolarRoversNo, 
+			availabeEmergencyRoversNo, availabeMountainiousRoversNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo);
+			lastDayMissionsAndRovers = todaysAssignedMissionsAndRovers;
 	}
 
 
 
-void Exit() {
-	if (!events.isEmpty() && !waitingEmergencyMissions.isEmpty() && !waitingMountainiousMissions.isEmpty() && !waitingPolarMission.isEmpty()) {
+void Exit(int currentDay) {
+	if (!events.isEmpty() && !waitingEmergencyMissions.isEmpty() && !waitingMountainiousMissions.isEmpty() && !waitingPolarMissions.isEmpty() && !inExecutionMissions.isEmpty()) {
 		isExit == true;
+		ui.OutputFile(currentDay, finishedMissions);
 	}
 }
 
