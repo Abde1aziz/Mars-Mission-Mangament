@@ -20,6 +20,7 @@
 #define IN_MISSION_ROVER 15
 #define WAITING_ROVER 16
 #define DOING_CHECKUP_ROVER 17
+#define MARS_DAYS 25
 
 class FormulationEvent :
     public Event
@@ -34,22 +35,25 @@ private:
     int eventDay;
     int missionID;
     int missionTargetLocationDistance;
-    int daysToComplete;
+    int daysToCompletefullfillRequirement;
     int missionSignificance;
+    int finishDay;
 public:
 
-    FormulationEvent():Event(){}
+    FormulationEvent() :Event() {}
     /*
     * A constructor that intialize the data members of the class.
     */
-    FormulationEvent(int type, int day, int id, int distance, int timeToComplete, int importance)
+    // MDUR the number of days needed to fulfill the mission requirements at target location.
+    FormulationEvent(int type, int day, int id, int distance, int MDUR, int importance, int FinishDay)
         : Event(FORMULATION_EVENT, type, day, id) {
         missionType = type;
         eventDay = day;
         missionID = id;
         missionTargetLocationDistance = distance;
-        daysToComplete = timeToComplete;
+        daysToCompletefullfillRequirement = MDUR;
         missionSignificance = importance;
+        finishDay = eventDay + timeToComplete;
     }
 
     int GetEventType() {
@@ -84,12 +88,15 @@ public:
         return missionTargetLocationDistance;
     }
 
-
+    int GetFinishDay()
+    {
+        return finishDay;
+    }
     /*
     * A getter for the number it takes to finish the mission
     */
     int GetDaysToComplete() {
-        return daysToComplete;
+        return daysToCompletefullfillRequirement;
     }
 
     /*

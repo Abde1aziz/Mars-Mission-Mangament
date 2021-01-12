@@ -13,6 +13,9 @@ public:
         count = 0;
 	}
 
+    int getCount() {
+        return count;
+    }
     bool enqueue(const T& item, int priority) {
         PriorityQueueNode<T>* t, * q;
         t = new PriorityQueueNode<T>();

@@ -6,13 +6,17 @@
 #include "LinkedList.h"
 #include "Rovers.h"
 #include "Helpers.h"
+#include "Node.h"
+#include <cmath>
+#include <iostream>
+#include "UI.h"
 
 using namespace std;
 class BaseStation
 {
-private:
+protected:
 
-	string *inputFileLines;
+	string* inputFileLines;
 	PriorityQueue<Missions> waitingEmergencyMissions;
 	LinkedList<Missions> waitingMountainiousMissions; // but it behaves like a queue delete node from begining and add node to the end
 	LinkedQueue<Missions> waitingPolarMissions;
@@ -21,9 +25,11 @@ private:
 	LinkedList<Missions> finishedMissions;
 	LinkedList<Rovers> roverCheckUpList;
 	LinkedList<Rovers> availablePolarRovers;
-	LinkedList<Rovers> availableMountainiousRovers; 
+	LinkedList<Rovers> availableMountainiousRovers;
 	LinkedList<Rovers> availableEmergencyRovers;
+	LinkedList<Rovers> inMissionRovers;
 	LinkedQueue<string> lastDayMissionsAndRovers;
+	LinkedQueue<string> todaysAssignedMissionsAndRovers;
 	int availabeEmergencyRoversNo;
 	int availabePolarRoversNo;
 	int availabeMountainiousRoversNo;
@@ -34,6 +40,10 @@ private:
 	int completedPolarMissionsNo;
 	int completedMountainiousMissionsNo;
 	int mode;
+
+	bool isExit = false;
+
+	UI ui;
 
 	//Input file variables
 	int mountainRoversSpeed;
@@ -46,13 +56,32 @@ private:
 	int autoPromotionDuration;
 	int numberOfEvents;
 
-	
-	//Todo: complete the other data fields
+
+	/*//completing phase 2
+		char missiontype;
+		int Event_day;
+		int mission_ID;
+		int DaysTo_Complete;
+		int Significance;
+		*/
+		//Todo: complete the other data fields
 public:
 
 	BaseStation(string inputLines[]) {
+
+		availabeEmergencyRoversNo = 0;
+		availabePolarRoversNo = 0;
+		availabeMountainiousRoversNo = 0;
+		waitingEmergencyMissionsNo = 0;
+		waitingPolarMissionsNo = 0;
+		waitingMountaniousMissionsNo = 0;
+		completedEmergencyMissionsNo = 0;
+		completedPolarMissionsNo = 0;
+		completedMountainiousMissionsNo = 0;
+
 		inputFileLines = inputLines;
 		Start();
+		ui = UI();
 	}
 
 	/*
@@ -89,7 +118,7 @@ public:
 		//*Creating rover objects
 		//Mountainious Rovers
 		for (int i = 0; i < availabeMountainiousRoversNo; i++) {
-			Rovers mRover(mountainCheckupDuration, mountainRoversSpeed, i+1, MOUNTAINOUS_ROVER);
+			Rovers mRover(mountainCheckupDuration, mountainRoversSpeed, i + 1, MOUNTAINOUS_ROVER);
 			availableMountainiousRovers.InsertBeg(mRover);
 		}
 
@@ -109,49 +138,224 @@ public:
 		FromStringToEvents(&inputFileLines[5], numberOfEvents);
 
 	}
-	
+
 	/*
 	 *This function is called at every time step and takes the current time step number
 	 */
-	void Update(int currentDay) {
-		//Peek to the queue event 
-		//if the event day of the event == the current day
-		// then dequeue
-		//check for the event type [formulation - cancelation - promotion]
-		//switch for every event type
-		//for formulation create mission 
-		//if the mission mountainous you will mission to the end of the list
-		//for cancelation check for the id in mountainous missions
+	void Update(int currentDay)
+	{
+		/*
+		* Assigning the missions
+		*/
+		Event currentEvent;
+		FormulationEvent FE;
+		CancelationEvent CE;
+		PromotionEvent PE;
 
-	}
-	
-	/*
-	* This function sets the value of the mode variable
-	*/
-	void SetMode(int m) {
-		mode = m;
-	}
+		while (events.peek(currentEvent))
+		{
+			if (currentEvent.GetEventDay() == currentDay)
+			{
+				int MissionType;
 
-	/*
-	* This function takes an array of string containing the information about the event 
-	* and populate the events queue
-	*/
-	void FromStringToEvents(string * eventsArray, int size) {
-		for (int i = 0; i < size; i++) {
-			if (eventsArray[i][0] == 'F' || eventsArray[i][0] == 'f') {
-				events.enqueue(Helper::ConvertStringToFormulationEvent(eventsArray[i]));
-			}
-			else if (eventsArray[i][0] == 'X' || eventsArray[i][0] == 'x') {
-				events.enqueue(Helper::ConvertStringToCancelationEvent(eventsArray[i]));
-			}
-			else if (eventsArray[i][0] == 'P' || eventsArray[i][0] == 'p') {
-				events.enqueue(Helper::ConvertStringToPromotionEvent(eventsArray[i]));
+				if (currentEvent.GetEventType() == FORMULATION_EVENT)
+				{
+					events.dequeue(FE);
+					MissionType = FE.GetMissionType();
+
+					if (MissionType == MOUNTAINOUS_MISSION)
+					{
+						Missions MM(FE.GetMissionID(), FE.GetDistance(), FE.GetSignificance(),
+							FE.GetDaysToComplete(),
+							currentDay, FE.GetMissionType());
+						waitingMountainiousMissions.InsertEnd(MM);
+						waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
+					}
+
+					else if (MissionType == EMERGENCY_MISSION)
+					{
+						double missionDuaration = (emergencyRoversSpeed / FE.GetDistance()) / 25;
+						Missions ME(FE.GetMissionID(), FE.GetDistance(), FE.GetSignificance(),
+							FE.GetDaysToComplete(),
+							currentDay, FE.GetMissionType());
+
+						double priority = FE.GetEventDay() + FE.GetDistance() + missionDuaration + FE.GetSignificance();
+						waitingEmergencyMissions.enqueue(ME, priority);
+						waitingEmergencyMissionsNo = waitingEmergencyMissions.getCount();
+
+					}
+					else if (MissionType == POLAR_MISSION)
+					{
+						Missions MP(FE.GetMissionID(), FE.GetDistance(), FE.GetSignificance(),
+							FE.GetDaysToComplete(),
+							currentDay, FE.GetMissionType());
+						waitingPolarMissions.enqueue(MP);
+						waitingPolarMissionsNo++;
+					}
+
+				}
+				else if (currentEvent.GetEventType() == CANCELATION_EVENT)
+				{
+					events.dequeue(CE);
+
+					Node<Missions>* pointer = waitingMountainiousMissions.getHead();
+					while (pointer)
+					{
+						if (pointer->getItem().GetMissionID() == CE.GetMissionID())
+							waitingMountainiousMissions.DeleteNode(pointer->getItem());
+						waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
+
+					}
+				}
+				else if (currentEvent.GetEventType() == PROMOTION_EVENT)
+				{
+					events.dequeue(PE);
+					int id = PE.GetMissionID();
+					Node<Missions>* pointer = waitingMountainiousMissions.getHead();
+					while (pointer) {
+						if (pointer->getItem().GetMissionID() == id) {
+							pointer->getItem().PromoteMission(currentDay);
+							waitingEmergencyMissions.enqueue(pointer->getItem(), pointer->getItem().GetSignificance());
+							
+							waitingMountainiousMissions.DeleteNode(pointer->getItem());
+							waitingEmergencyMissionsNo = waitingEmergencyMissions.getCount();
+							waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
+
+						}
+					}
+
+				}
 			}
 		}
+
+		/*
+		Waiting to Inexcution
+		*/
+		//assigning for EmergencyMission
+		Missions Mission;
+		Node<Rovers>* polarrover = availablePolarRovers.getHead();
+
+		Node<Rovers>* emergencyrover = availableEmergencyRovers.getHead();
+		Node<Rovers>* Mountainousrover = availableMountainiousRovers.getHead();
+		while(waitingEmergencyMissions.peek(Mission)){
+			waitingEmergencyMissions.dequeue(Mission);
+			waitingEmergencyMissionsNo = waitingEmergencyMissions.getCount();
+			if (availableEmergencyRovers.getHead())
+			{
+				inExecutionMissions.InsertBeg(Mission);
+				Mission.AssignRover(currentDay, emergencyrover);
+				emergencyrover->getItem().AssignRover2Mission();
+				inMissionRovers.InsertEnd(emergencyrover->getItem());
+				availableEmergencyRovers.DeleteNode(emergencyrover->getItem());
+				availabeEmergencyRoversNo = availableEmergencyRovers.getCount();
+			}
+			else if (availableMountainiousRovers.getHead())
+			{
+				inExecutionMissions.InsertBeg(waitingMountainiousMissions.getHead()->getItem());
+				Mission.AssignRover(currentDay, Mountainousrover);
+				Mountainousrover->getItem().AssignRover2Mission();
+				inMissionRovers.InsertEnd(Mountainousrover->getItem());
+				availableMountainiousRovers.DeleteNode(Mountainousrover->getItem());
+				availabeMountainiousRoversNo = availableMountainiousRovers.getCount();
+				
+			}
+			else if (availablePolarRovers.getHead())
+			{
+				waitingPolarMissions.dequeue(Mission);
+				inExecutionMissions.InsertBeg(Mission);
+				availabePolarRoversNo--;
+				Mission.AssignRover(currentDay, polarrover);
+			}
+		}
+		//assigning for MountauniousMission
+		if (availableMountainiousRovers.getHead())
+		{
+			inExecutionMissions.InsertBeg(waitingMountainiousMissions.getHead()->getItem());
+			availabeMountainiousRoversNo--;
+			Mission.AssignRover(currentDay, Mountainousrover);
+		}
+		else if (availablePolarRovers.getHead())
+		{
+			waitingPolarMissions.dequeue(Mission);
+			inExecutionMissions.InsertBeg(Mission);
+			availabePolarRoversNo--;
+			Mission.AssignRover(currentDay, polarrover);
+
+		}
+		//assigning for PolarMission
+		if (availablePolarRovers.getHead())
+		{
+			waitingPolarMissions.dequeue(Mission);
+			inExecutionMissions.InsertBeg(Mission);
+			availabePolarRoversNo--;
+			Mission.AssignRover(currentDay, polarrover);
+
+		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		/*
+		* inExecution to completed
+		*/
+
+		if (remainder(currentDay, 5) == 0)
+		{
+
+			Node<Missions>* completedmission = inExecutionMissions.getHead();
+
+			if (completedmission)
+			{
+				finishedMissions.InsertBeg(completedmission->getItem());
+			}
+		}
+
+		Exit();
 	}
 
-	~BaseStation() {
-		delete inputFileLines;
+
+
+void Exit() {
+	if (!events.isEmpty() && !waitingEmergencyMissions.isEmpty() && !waitingMountainiousMissions.isEmpty() && !waitingPolarMission.isEmpty()) {
+		isExit == true;
 	}
+}
+
+bool GetIsExit() {
+	return isExit;
+}
+
+void SetMode(int m);
+void	FromStringToEvents(string* eventsArray, int size);
+~BaseStation();
+
+
 };
 
+/*
+* This function sets the value of the mode variable
+*/
+void BaseStation::SetMode(int m) {
+	mode = m;
+}
+/*
+ * This function takes an array of string containing the information about the event
+ * and populate the events queue
+ */
+
+void BaseStation::FromStringToEvents(string* eventsArray, int size) {
+	for (int i = 0; i < size; i++) {
+		if (eventsArray[i][0] == 'F' || eventsArray[i][0] == 'f') {
+			events.enqueue(Helper::ConvertStringToFormulationEvent(eventsArray[i]));
+		}
+		else if (eventsArray[i][0] == 'X' || eventsArray[i][0] == 'x') {
+			events.enqueue(Helper::ConvertStringToCancelationEvent(eventsArray[i]));
+		}
+		else if (eventsArray[i][0] == 'P' || eventsArray[i][0] == 'p') {
+			events.enqueue(Helper::ConvertStringToPromotionEvent(eventsArray[i]));
+		}
+	}
+}
+
+BaseStation::~BaseStation()
+{
+	delete inputFileLines;
+}

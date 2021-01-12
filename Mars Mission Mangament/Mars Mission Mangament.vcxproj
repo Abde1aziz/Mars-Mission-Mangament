@@ -158,6 +158,7 @@
     <ClInclude Include="QueueADT.h" />
     <ClInclude Include="Rovers.h" />
     <ClInclude Include="StackADT.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

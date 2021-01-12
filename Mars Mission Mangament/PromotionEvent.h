@@ -11,6 +11,9 @@ public:
     /*
     * Constructor for the class that intialize the data members
     */
+
+    PromotionEvent(){}
+
     PromotionEvent(int day, int id)
     :Event(PROMOTION_EVENT, MOUNTAINOUS_MISSION, day, id){
         eventDay = day;

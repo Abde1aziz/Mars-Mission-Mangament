@@ -30,6 +30,15 @@ public:
 	int getNumberOfMissionsCompleted();
 	void setTimeToFinishCheckup(int TimeToFinishCheckup);
 	int getTimeToFinishCheckup();
+
+	void AssignRover2Mission() {
+		roverStatus = IN_MISSION_ROVER;
+	}
+	
+	void CompleteRoverMission() {
+		roverStatus = WAITING_ROVER;
+		numberOfMissionsCompleted++;
+	}
 };
 
 Rovers::Rovers() {}

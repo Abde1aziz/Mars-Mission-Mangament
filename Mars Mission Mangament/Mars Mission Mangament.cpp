@@ -12,7 +12,7 @@ int main()
     ///Variables
     int currentDay = 0; //The current day of the mission. It is incremented every iteration 
     bool exit = false;
-    
+
 
     ///Asking the user to choose the mood of operation
     int mode; // the view mode of the of the output 1- Interactive mode 2-Step by Step mode 3- Silent Mode 
@@ -26,9 +26,9 @@ int main()
     string fileLines[100];
 
     //ask the user to enter the file name
-    cout << "Enter the file name"<<endl;
+    cout << "Enter the file name" << endl;
     cin >> fileName;
-    
+
     //Copy the lines of the input file into and array of strings
     inputFile.open(fileName, ios::in);
     if (inputFile.is_open()) {

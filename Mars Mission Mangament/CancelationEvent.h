@@ -12,8 +12,10 @@ public:
     /*
     * Constructor for the class that intialize the data members
     */
+    CancelationEvent()
+    {}
     CancelationEvent(int day, int id)
-    :Event(CANCELATION_EVENT, MOUNTAINOUS_MISSION, day, id){
+        :Event(CANCELATION_EVENT, MOUNTAINOUS_MISSION, day, id) {
         eventDay = day;
         missionID = id;
     }
