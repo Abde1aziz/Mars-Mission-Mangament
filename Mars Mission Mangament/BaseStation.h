@@ -228,7 +228,7 @@ public:
 			}
 		}
 
-		/*
+		/* 
 		Waiting to Inexcution
 		*/
 		//assigning for EmergencyMission
@@ -251,7 +251,7 @@ public:
 			}
 			else if (availableMountainiousRovers.getHead())
 			{
-				inExecutionMissions.InsertBeg(waitingMountainiousMissions.getHead()->getItem());
+				inExecutionMissions.InsertBeg(Mission);
 				Mission.AssignRover(currentDay, Mountainousrover);
 				Mountainousrover->getItem().AssignRover2Mission();
 				inMissionRovers.InsertEnd(Mountainousrover->getItem());
@@ -261,26 +261,33 @@ public:
 			}
 			else if (availablePolarRovers.getHead())
 			{
+				inExecutionMissions.InsertBeg(Mission);
+				Mission.AssignRover(currentDay, polarrover);
+				polarrover->getItem().AssignRover2Mission();
+				inMissionRovers.InsertEnd(polarrover->getItem());
+				availablePolarRovers.DeleteNode(polarrover->getItem());
+				availabePolarRoversNo = availablePolarRovers.getCount();
+			}
+		}
+		//assigning for MountauniousMission
+		while (waitingMountainiousMissions.getHead() != nullptr) {
+
+			Mission = waitingMountainiousMissions.getHead()->getItem();
+
+			if (availableMountainiousRovers.getHead())
+			{
+				inExecutionMissions.InsertBeg(waitingMountainiousMissions.getHead()->getItem());
+				availabeMountainiousRoversNo--;
+				Mission.AssignRover(currentDay, Mountainousrover);
+			}
+			else if (availablePolarRovers.getHead())
+			{
 				waitingPolarMissions.dequeue(Mission);
 				inExecutionMissions.InsertBeg(Mission);
 				availabePolarRoversNo--;
 				Mission.AssignRover(currentDay, polarrover);
-			}
-		}
-		//assigning for MountauniousMission
-		if (availableMountainiousRovers.getHead())
-		{
-			inExecutionMissions.InsertBeg(waitingMountainiousMissions.getHead()->getItem());
-			availabeMountainiousRoversNo--;
-			Mission.AssignRover(currentDay, Mountainousrover);
-		}
-		else if (availablePolarRovers.getHead())
-		{
-			waitingPolarMissions.dequeue(Mission);
-			inExecutionMissions.InsertBeg(Mission);
-			availabePolarRoversNo--;
-			Mission.AssignRover(currentDay, polarrover);
 
+			}
 		}
 		//assigning for PolarMission
 		if (availablePolarRovers.getHead())
