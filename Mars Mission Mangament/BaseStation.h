@@ -164,12 +164,16 @@ public:
 					events.dequeue(FE);
 					MissionType = FE.GetMissionType();
 
+
+					cout << "got formulation event" << endl;
+					cout << MissionType << endl;
 					if (MissionType == MOUNTAINOUS_MISSION)
 					{
 						Missions MM(FE.GetMissionID(), FE.GetDistance(), FE.GetSignificance(),
 							FE.GetDaysToComplete(),
 							currentDay, FE.GetMissionType());
 						waitingMountainiousMissions.InsertEnd(MM);
+						cout << "mountainious mission created" << endl;
 						waitingMountaniousMissionsNo = waitingMountainiousMissions.getCount();
 					}
 
@@ -179,6 +183,8 @@ public:
 						Missions ME(FE.GetMissionID(), FE.GetDistance(), FE.GetSignificance(),
 							FE.GetDaysToComplete(),
 							currentDay, FE.GetMissionType());
+
+						cout << "e mission created" << endl;
 
 						double priority = FE.GetEventDay() + FE.GetDistance() + missionDuaration + FE.GetSignificance();
 						waitingEmergencyMissions.enqueue(ME, priority);
@@ -190,6 +196,8 @@ public:
 						Missions MP(FE.GetMissionID(), FE.GetDistance(), FE.GetSignificance(),
 							FE.GetDaysToComplete(),
 							currentDay, FE.GetMissionType());
+
+						cout << "p mission created" << endl;
 						waitingPolarMissions.enqueue(MP);
 						waitingPolarMissionsNo++;
 					}
@@ -197,6 +205,7 @@ public:
 				}
 				else if (currentEvent.GetEventType() == CANCELATION_EVENT)
 				{
+					cout << "get cancelation event" << endl;
 					events.dequeue(CE);
 
 					Node<Missions>* pointer = waitingMountainiousMissions.getHead();
@@ -212,6 +221,7 @@ public:
 				}
 				else if (currentEvent.GetEventType() == PROMOTION_EVENT)
 				{
+					cout << " got promotion event" << endl;
 					events.dequeue(PE);
 					int id = PE.GetMissionID();
 					Node<Missions>* pointer = waitingMountainiousMissions.getHead();
@@ -490,12 +500,14 @@ public:
 		
 
 		Exit(currentDay);
+		if (mode != 3) {
 
 			ui.OutputMode(currentDay, availablePolarRovers, availableMountainiousRovers, availableEmergencyRovers,
 				waitingPolarMissions, waitingMountainiousMissions, waitingEmergencyMissions, inExecutionMissions, finishedMissions,
 				lastDayMissionsAndRovers, waitingPolarMissionsNo, waitingEmergencyMissionsNo, waitingMountaniousMissionsNo, availabePolarRoversNo, 
 				availabeEmergencyRoversNo, availabeMountainiousRoversNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo);
 
+		}
 		lastDayMissionsAndRovers = todaysAssignedMissionsAndRovers;
 
 	}
