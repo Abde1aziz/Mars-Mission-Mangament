@@ -492,13 +492,14 @@ public:
 			waitingPolarMissions, waitingMountainiousMissions, waitingEmergencyMissions, inExecutionMissions, finishedMissions,
 			lastDayMissionsAndRovers, waitingPolarMissionsNo, waitingEmergencyMissionsNo, waitingMountaniousMissionsNo, availabePolarRoversNo, 
 			availabeEmergencyRoversNo, availabeMountainiousRoversNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo, completedEmergencyMissionsNo);
-			lastDayMissionsAndRovers = todaysAssignedMissionsAndRovers;
+		lastDayMissionsAndRovers = todaysAssignedMissionsAndRovers;
+
 	}
 
 
 
 void Exit(int currentDay) {
-	if (!events.isEmpty() && !waitingEmergencyMissions.isEmpty() && !waitingMountainiousMissions.isEmpty() && !waitingPolarMissions.isEmpty() && !inExecutionMissions.isEmpty()) {
+	if (events.isEmpty() && waitingEmergencyMissions.isEmpty() && waitingMountainiousMissions.isEmpty() && waitingPolarMissions.isEmpty() && inExecutionMissions.isEmpty()) {
 		isExit == true;
 		ui.OutputFile(currentDay, finishedMissions);
 	}
